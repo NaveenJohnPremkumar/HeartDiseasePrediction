@@ -1,0 +1,73 @@
+"0",""
+"0","library(caret)"
+"2","Loading required package: ggplot2
+"
+"2","Loading required package: lattice
+"
+"2","Registered S3 method overwritten by 'data.table':
+  method           from
+  print.data.table     
+"
+"0","library(class)"
+"0","library(neuralnet) "
+"0","library(kernlab) # for svm"
+"2","
+Attaching package: ‘kernlab’
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    alpha
+
+"
+"0","library(C50) # for decision trees"
+"0","library(randomForest)"
+"2","randomForest 4.7-1.1
+"
+"2","Type rfNews() to see new features/changes/bug fixes.
+"
+"2","
+Attaching package: ‘randomForest’
+
+"
+"2","The following object is masked from ‘package:ggplot2’:
+
+    margin
+
+"
+"0","library(tidyr)"
+"0","library(dplyr)"
+"2","
+Attaching package: ‘dplyr’
+
+"
+"2","The following object is masked from ‘package:randomForest’:
+
+    combine
+
+"
+"2","The following object is masked from ‘package:neuralnet’:
+
+    compute
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+"
+"0","library(janitor)"
+"2","
+Attaching package: ‘janitor’
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    chisq.test, fisher.test
+
+"

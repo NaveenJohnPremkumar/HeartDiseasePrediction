@@ -1,0 +1,7 @@
+"0",""
+"0","ratio <- 0.6"
+"0","set.seed(12345)"
+"0","train_rows <- sample(1:nrow(heart_norm), ratio*nrow(heart_norm))"
+"0","train_data <- heart_norm[train_rows, ]"
+"0","test_data <- heart_norm[-train_rows, ]"
+"0",""

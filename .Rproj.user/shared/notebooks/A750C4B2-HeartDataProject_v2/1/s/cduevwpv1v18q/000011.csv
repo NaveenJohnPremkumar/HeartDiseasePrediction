@@ -1,0 +1,7 @@
+"0","set.seed(12345)"
+"0",""
+"0","# Build model"
+"0","ann_model <- neuralnet(heart_disease ~ ., data = train_data, hidden = c(4,2), threshold = 0.01, stepmax = 1e+08, algorithm = ""slr"") "
+"0",""
+"0","# Plot Model"
+"0","plot(ann_model)"

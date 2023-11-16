@@ -1,0 +1,1 @@
+"0","heart <- read.csv(""heart.csv"", stringsAsFactors = TRUE)"

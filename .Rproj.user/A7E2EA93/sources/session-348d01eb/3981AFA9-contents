@@ -1,0 +1,96 @@
+---
+title: "Heart Random Forest"
+output: html_document
+date: "2023-11-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## DATA IMPORT
+
+# 1. Libraries
+
+```{r}
+
+library(caret)
+library(class)
+library(neuralnet)
+library(kernlab) # for svm
+library(C50) # for decision trees
+library(tidyr)
+library(dplyr)
+library(janitor)
+library(randomForest)
+
+```
+
+# 2. Working with the Data
+# 2.1 Importing the Data
+
+```{r}
+heart <- read.csv("heart.csv", stringsAsFactors = TRUE)
+```
+
+# 2.2 Looking at the Data
+
+```{r}
+summary(heart)
+
+```
+
+## 2.3 Prepping the Data
+
+```{r}
+
+heart_mm <- as.data.frame(model.matrix(~., -1, data = heart))
+heart_mm <- clean_names(heart_mm)
+
+heart_mm$intercept <- NULL
+
+#Normalize the data
+normalize <- function(x) {
+  return ((x - min(x)) / (max(x) - min(x)))
+}
+
+# we are going to normalize for KNN and ANN
+heart_norm <- as.data.frame(lapply(heart_mm, normalize))
+
+str(heart_norm)
+
+```
+
+## 2.4 Splitting Train and Test
+
+```{r}
+
+ratio <- 0.6
+set.seed(12345)
+train_rows <- sample(1:nrow(heart_norm), ratio*nrow(heart_norm))
+train_data <- heart_norm[train_rows, ]
+test_data <- heart_norm[-train_rows, ]
+
+```
+
+## Random Forest Classifier 
+
+```{r}
+set.seed(12345)
+rf_model <- randomForest(heart_disease ~ ., data = train_data, ntree = 200)
+
+ 
+plot(rf_model)
+
+set.seed(12345)
+rf_predict <- predict(rf_model, test_data, type = "response") 
+rf_bin_predict <- ifelse(rf_predict >= .3, 1, 0)
+
+
+
+confusionMatrix(as.factor(rf_bin_predict), as.factor(test_data$heart_disease), positive = "1")
+
+```
+
+
+

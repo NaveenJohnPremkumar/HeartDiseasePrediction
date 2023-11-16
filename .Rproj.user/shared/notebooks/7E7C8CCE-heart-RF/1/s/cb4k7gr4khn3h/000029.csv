@@ -1,0 +1,5 @@
+"0","set.seed(12345)"
+"0","rf_model <- randomForest(heart_disease ~ ., data = train_data, ntree = 200)"
+"2","Warning: The response has five or fewer unique values.  Are you sure you want to do regression?"
+"0"," "
+"0","plot(rf_model)"
