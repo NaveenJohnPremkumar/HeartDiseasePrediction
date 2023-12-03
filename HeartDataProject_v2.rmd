@@ -38,7 +38,9 @@ heart <- read.csv("heart.csv", stringsAsFactors = TRUE)
 
 # 2.2 Looking at the Data
 ```{r}
-summary(heart)
+#summary(heart)
+
+names(heart)
 
 ```
 
@@ -50,6 +52,8 @@ summary(heart)
 
 heart_mm <- as.data.frame(model.matrix(~., -1, data = heart))
 heart_mm <- clean_names(heart_mm)
+
+
 
 heart_mm$intercept <- NULL
 
@@ -104,6 +108,8 @@ set.seed(12345)
 lr_model <- glm(heart_disease ~., family = "binomial", data = train_data)
 summary(lr_model)
 
+saveRDS(lr_model, "lr_model.rds")
+
 lr_predict <- predict(lr_model, test_data, type = "response")
 lr_bin <- ifelse(lr_predict >= 0.5, 1, 0)
 
@@ -117,6 +123,7 @@ set.seed(12345)
 
 # Build Model
 tree_model <- C5.0(as.factor(heart_disease) ~. ,data = train_data)
+saveRDS(tree_model, "dt_model.rds")
 
 # Predict
 tree_predict <- predict(tree_model, test_data)
@@ -147,6 +154,8 @@ set.seed(12345)
 # Build model
 ann_model <- neuralnet(heart_disease ~ ., data = train_data, hidden = c(4,2), threshold = 0.01, stepmax = 1e+08, algorithm = "slr") 
 
+saveRDS(ann_model, "ann_model.rds")
+
 # Plot Model
 plot(ann_model)
 
@@ -169,6 +178,8 @@ set.seed(12345)
 # Build model
 rf_model <- randomForest(heart_disease ~ ., data = train_data, ntree = 200)
 
+saveRDS(rf_model, "rf_model.rds")
+
 # Plot model
 plot(rf_model)
 
@@ -177,6 +188,7 @@ rf_predict <- predict(rf_model, test_data, type = "response")
 
 # Make output binary
 rf_bin_predict <- ifelse(rf_predict >= .3, 1, 0)
+varImpPlot(rf_model)
 
 
 # Confusion Matrix
@@ -189,6 +201,7 @@ confusionMatrix(as.factor(rf_bin_predict), as.factor(test_data$heart_disease), p
 ```{r}
 # Laplace Model
 svm_laplace_model <- ksvm(heart_disease ~ ., data = train_data, kernel = "laplacedot")
+saveRDS(svm_laplace_model, "laplace_model.rds")
 svm_laplace_predict <- predict(svm_laplace_model, test_data)
 svm_laplace_bin <- ifelse(svm_laplace_predict >= 0.5, 1, 0)
 confusionMatrix(as.factor(svm_laplace_bin), as.factor(test_data_labels))
@@ -243,21 +256,32 @@ combined_rows <- sample(1:nrow(combined), 0.7*nrow(combined))
 # Train Data
 combined_train <- combined[combined_rows,]
 
+combined_train_no_answer <- combined_train[,-ncol(combined_train)]
+
 # Test Data
 combined_test <- combined[-combined_rows,]
 
+combined_test_no_answer <- combined_test[,-ncol(combined_test)]
+
 # Cost Matrix
-error_cost <- matrix(nrow = 2, ncol = 2, data = c(0,0,0,0))
+error_cost <- matrix(nrow = 2, ncol = 2, data = c(0,1,10,0))
 ```
 
 
 #Build Model
 ```{r}
 # Build Decision Tree Model of Models
+
+
 combined_model <- C5.0(as.factor(test_data_labels) ~., data = combined_train, cost = error_cost)
 
+saveRDS(combined_model, "combined.rds")
 #Predict against test data
-combined_predict <- predict(combined_model, combined_test)
+combined_predict <- predict(combined_model, combined_test_no_answer)
+data <- head(combined, n=1)
+str(data)
+
+summary(predict(combined_model, data ))
 
 # Confusion Matrix
 confusionMatrix(as.factor(combined_predict),as.factor(combined_test$test_data_labels))

@@ -2,6 +2,7 @@
 "0",""
 "0","# Build Model"
 "0","tree_model <- C5.0(as.factor(heart_disease) ~. ,data = train_data)"
+"0","saveRDS(tree_model, ""dt_model.rds"")"
 "0",""
 "0","# Predict"
 "0","tree_predict <- predict(tree_model, test_data)"
