@@ -3,8 +3,6 @@ library(shinydashboard)
 library(rpart)
 #library(mice)
 
-# Assume 'your_data' is your training dataset
-# Assume 'your_response_variable' is the response variable in your dataset
 
 # Train your decision tree model
 
@@ -25,7 +23,8 @@ ui <- dashboardPage(
   dashboardHeader(title = "Heart Disease Prediction"),
   dashboardSidebar(
     # Body content
-    textOutput("prediction")
+    h3(textOutput("prediction"), align = "center"),
+    h5(textOutput("subtext"), align = "center")
   ),
   dashboardBody(
     
@@ -48,14 +47,17 @@ ui <- dashboardPage(
     helpText("Use a blood test kit to get your cholesterol levels and Blood Sugar"),
     numericInput("Cholesterol", "Cholesterol:", value = 200),
     sliderInput("FastingBS", "Fasting Blood Sugar:", min = 0, max = 1, step = 0.01, value = 0.5),
-    helpText("Use a free app on your phone"),
+    helpText("Use a free app on your phone to get your ECG"),
     selectInput("RestingECG", "Resting EKG:",
                 c("Normal", "ST-T wave abnormality", "Left ventricular hypertrophy"),
                 selected = "Normal"),
+    helpText("Enter your heart rate after 1 minute of an intense exercise"),
     numericInput("MaxHR", "Maximum Heart Rate:", value = 150),
+    helpText("Enter Yes if you have pain after that exercise, otherwise put No"),
     selectInput("ExerciseAngina", "Exercise-Induced Angina:",
                 c("No", "Yes"),
                 selected = "No"),
+    helpText("Get the peak and the slope from your ECG"),
     numericInput("Oldpeak", "Oldpeak:", value = 0),
     selectInput("ST_Slope", "ST Segment Slope:",
                 c("Upsloping", "Flat", "Downsloping"),
@@ -72,6 +74,7 @@ server <- function(input, output) {
   # Reactive values
   predict_button <- reactiveVal(FALSE)
   prediction_result <- reactiveVal(NULL)
+  sub <- reactiveVal(NULL)
   
   # Make predictions based on user input
   
@@ -173,14 +176,19 @@ server <- function(input, output) {
       svm_vanilla_predict_n
     )
     
-    print(combinedd)
+    #print(combinedd)
     
     
     result <- ifelse (lr_predict_n >= 0.5, "You are at risk of stroke", "You are not at risk of a stroke")
     
+    
+    sub <- ifelse (lr_predict_n >= 0.5,
+                   "Ask your health care professional about how you can reduce your risk. Stroke is largely preventable, treatable and beatable. Visit https://www.bcbsil.com/bcchp/getting-care/health-and-wellness/stroke for more information ", 
+                   "Make sure you are continue limiting the risks of stroke by keeping a healthy weight, having frequent exercise, and stopping bad habits like smoking")
     #combined_predict <- predict(combined_model, combinedd)
     # Set the prediction result
     prediction_result((result))
+    sub(sub)
     
     #paste(output$predictiion)
     
@@ -190,8 +198,11 @@ server <- function(input, output) {
   
   # Render the prediction result
   output$prediction <- renderText({
-    
     prediction_result()
+  })
+  
+  output$subtext <- renderText({
+    sub()
   })
 }
 

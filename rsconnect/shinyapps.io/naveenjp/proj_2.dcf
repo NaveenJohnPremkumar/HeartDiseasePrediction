@@ -5,6 +5,6 @@ account: naveenjp
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 10725063
-bundleId: 8011222
+bundleId: 8011821
 url: https://naveenjp.shinyapps.io/proj_2/
 version: 1
