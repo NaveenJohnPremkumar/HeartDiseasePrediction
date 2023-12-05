@@ -3,6 +3,8 @@
 "2","Warning: non-list contrasts argument ignored"
 "0","heart_mm <- clean_names(heart_mm)"
 "0",""
+"0",""
+"0",""
 "0","heart_mm$intercept <- NULL"
 "0",""
 "0","#Normalize the data"

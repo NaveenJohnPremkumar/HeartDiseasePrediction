@@ -3,6 +3,8 @@
 "0","# Model and Predictions"
 "0","knn_predict <- knn(train_data_predictors, test_data_predictors, train_data_labels, k = 21, prob = 0.4)"
 "0",""
+"0","write.csv(train_data_predictors, ""train_data_predictors.csv"")"
+"0","write.csv(train_data_labels, ""train_data_labels.csv"")"
 "0","# Confusion Matrix"
 "0","knn_matrix <- as.data.frame(as.table(confusionMatrix(as.factor(knn_predict), as.factor(test_data_labels), positive = ""1"")))"
 "0",""

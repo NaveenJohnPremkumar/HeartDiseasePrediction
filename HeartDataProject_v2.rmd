@@ -38,9 +38,11 @@ heart <- read.csv("heart.csv", stringsAsFactors = TRUE)
 
 # 2.2 Looking at the Data
 ```{r}
-#summary(heart)
+summary(heart)
 
-names(heart)
+#names(heart)
+
+
 
 ```
 
@@ -139,6 +141,8 @@ set.seed(12345)
 # Model and Predictions
 knn_predict <- knn(train_data_predictors, test_data_predictors, train_data_labels, k = 21, prob = 0.4)
 
+write.csv(train_data_predictors, "train_data_predictors.csv")
+write.csv(train_data_labels, "train_data_labels.csv")
 # Confusion Matrix
 knn_matrix <- as.data.frame(as.table(confusionMatrix(as.factor(knn_predict), as.factor(test_data_labels), positive = "1")))
 
@@ -210,6 +214,7 @@ confusionMatrix(as.factor(svm_laplace_bin), as.factor(test_data_labels))
 ```{r}
 # Vanilla Model
 svm_vanilla_model <- ksvm(heart_disease ~ ., data = train_data, kernel = "vanilladot")
+saveRDS(svm_vanilla_model, "vanilla_model.rds")
 svm_vanilla_predict <- predict(svm_vanilla_model, test_data)
 svm_vanilla_bin <- ifelse(svm_vanilla_predict >= 0.5, 1, 0)
 confusionMatrix(as.factor(svm_vanilla_bin), as.factor(test_data_labels))
@@ -218,6 +223,7 @@ confusionMatrix(as.factor(svm_vanilla_bin), as.factor(test_data_labels))
 ```{r}
 # RBF Model
 svm_rbf_model <- ksvm(heart_disease ~ ., data = train_data, kernel = "rbfdot")
+saveRDS(svm_rbf_model, "rbf_model.rds")
 svm_rbf_predict <- predict(svm_rbf_model, test_data)
 svm_rbf_bin <- ifelse(svm_rbf_predict >= 0.5, 1, 0)
 confusionMatrix(as.factor(svm_rbf_bin), as.factor(test_data_labels))
@@ -232,6 +238,7 @@ confusionMatrix(as.factor(svm_rbf_bin), as.factor(test_data_labels))
 combined <- data.frame(
   
   lr_predict,
+  tree_predict,
   knn_predict,
   ann_predict,
   svm_rbf_predict,
@@ -264,7 +271,7 @@ combined_test <- combined[-combined_rows,]
 combined_test_no_answer <- combined_test[,-ncol(combined_test)]
 
 # Cost Matrix
-error_cost <- matrix(nrow = 2, ncol = 2, data = c(0,1,10,0))
+error_cost <- matrix(nrow = 2, ncol = 2, data = c(0,0,0,0))
 ```
 
 

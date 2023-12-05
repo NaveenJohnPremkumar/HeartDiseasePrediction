@@ -1,5 +1,6 @@
 "0","# RBF Model"
 "0","svm_rbf_model <- ksvm(heart_disease ~ ., data = train_data, kernel = ""rbfdot"")"
+"0","saveRDS(svm_rbf_model, ""rbf_model.rds"")"
 "0","svm_rbf_predict <- predict(svm_rbf_model, test_data)"
 "0","svm_rbf_bin <- ifelse(svm_rbf_predict >= 0.5, 1, 0)"
 "0","confusionMatrix(as.factor(svm_rbf_bin), as.factor(test_data_labels))"

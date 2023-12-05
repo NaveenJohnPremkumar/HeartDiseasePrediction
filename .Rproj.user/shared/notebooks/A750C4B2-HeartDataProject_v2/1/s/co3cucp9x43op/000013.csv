@@ -1,7 +1,0 @@
-"0",""
-"0","# Predict"
-"0","rf_predict <- predict(rf_model, test_data, type = ""response"") "
-"0",""
-"0","# Make output binary"
-"0","rf_bin_predict <- ifelse(rf_predict >= .3, 1, 0)"
-"0","varImpPlot(rf_model)"

@@ -4,6 +4,7 @@
 "1"," "
 "1","
 "
+"0","saveRDS(svm_vanilla_model, ""vanilla_model.rds"")"
 "0","svm_vanilla_predict <- predict(svm_vanilla_model, test_data)"
 "0","svm_vanilla_bin <- ifelse(svm_vanilla_predict >= 0.5, 1, 0)"
 "0","confusionMatrix(as.factor(svm_vanilla_bin), as.factor(test_data_labels))"
